@@ -1,5 +1,5 @@
-import { notFound } from "next/navigation";
 import { format } from "date-fns";
+import { notFound } from "next/navigation";
 
 import { getTrip } from "@/lib/trips";
 

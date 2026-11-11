@@ -1,7 +1,7 @@
-import { getTrips } from "@/lib/trips";
 import { format } from "date-fns";
-
 import Link from "next/link";
+
+import { getTrips } from "@/lib/trips";
 
 export default async function TripsPage() {
 	const trips = await getTrips();

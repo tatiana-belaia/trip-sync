@@ -1,13 +1,16 @@
 "use client";
 "use no memo";
 
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-import { type ItineraryFormValues, itineraryFormSchema } from "./schema";
+import {
+	type ItineraryItemInput,
+	itineraryItemInputSchema,
+} from "@/schemas/itinerary";
 
 interface ItineraryFormProps {
-	onSubmit: (values: ItineraryFormValues) => Promise<void>;
+	onSubmit: (values: ItineraryItemInput) => Promise<void>;
 	isPending: boolean;
 }
 
@@ -20,8 +23,8 @@ export default function ItineraryForm({
 		handleSubmit,
 		reset,
 		formState: { errors },
-	} = useForm<ItineraryFormValues>({
-		resolver: zodResolver(itineraryFormSchema),
+	} = useForm<ItineraryItemInput>({
+		resolver: zodResolver(itineraryItemInputSchema),
 		defaultValues: {
 			title: "",
 			date: "",
@@ -29,7 +32,7 @@ export default function ItineraryForm({
 		},
 	});
 
-	const submitForm = async (values: ItineraryFormValues): Promise<void> => {
+	const submitForm = async (values: ItineraryItemInput): Promise<void> => {
 		try {
 			await onSubmit(values);
 		} catch {

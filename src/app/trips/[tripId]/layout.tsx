@@ -1,7 +1,8 @@
-import type { ReactNode } from "react";
 import { notFound } from "next/navigation";
+import type { ReactNode } from "react";
 
 import { getTrip } from "@/lib/trips";
+
 import TripTabs from "./trip-tabs";
 
 interface TripLayoutProps {

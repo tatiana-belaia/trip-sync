@@ -1,13 +1,17 @@
-import { type ItineraryItem, itineraryItems } from "@/data/itinerary";
+import { type ItineraryItem } from "@/data/itinerary";
 
 export const getItinerary = async (
 	tripId: string,
 ): Promise<ItineraryItem[]> => {
-	await new Promise((resolve) => {
-		setTimeout(resolve, 1500);
-	});
-	console.log("getItinerary called:", tripId);
-	return itineraryItems.filter((item) => item.tripId === tripId);
+	const response = await fetch(`/api/trips/${tripId}/itinerary`);
+
+	if (!response.ok) {
+		throw new Error("Something went wrong");
+	}
+
+	const data: ItineraryItem[] = await response.json();
+
+	return data;
 };
 
 export const addItineraryItem = async ({
@@ -16,27 +20,17 @@ export const addItineraryItem = async ({
 	date,
 	location,
 }: Omit<ItineraryItem, "id">): Promise<ItineraryItem> => {
-	console.log("MUTATION START:", title);
-
-	await new Promise((resolve) => {
-		setTimeout(resolve, 1000);
+	const response = await fetch(`/api/trips/${tripId}/itinerary`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+		},
+		body: JSON.stringify({ title, date, location }),
 	});
 
-	if (title.toLowerCase().includes("fail")) {
-		console.log("THROWING ERROR:", title);
-		throw new Error("Failed to add itinerary item");
+	if (!response.ok) {
+		throw new Error("Something went wrong");
 	}
 
-	const newItem = {
-		id: Date.now(),
-		tripId,
-		title,
-		date,
-		location,
-	};
-	console.log("PUSHING:", newItem);
-
-	itineraryItems.push(newItem);
-
-	return newItem;
+	return response.json();
 };
