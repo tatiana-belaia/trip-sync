@@ -1,17 +1,31 @@
 import { cache } from "react";
 
-import { trips } from "@/data/trips";
 import type { Trip } from "@/types/trips";
 
 export const getTrip = cache(
 	async (tripId: string): Promise<Trip | undefined> => {
-		await new Promise((resolve) => {
-			setTimeout(resolve, 1500);
-		});
+		const baseUrl = process.env.TRIPS_API_BASE_URL;
 
-		console.log("getTrip called:", tripId);
+		if (!baseUrl) {
+			throw new Error("Missing TRIPS_API_BASE_URL");
+		}
 
-		return trips.find((trip) => trip.id === tripId);
+		const response = await fetch(
+			`${baseUrl}/trips/${encodeURIComponent(tripId)}`,
+			{
+				cache: "no-store",
+			},
+		);
+
+		if (response.status === 404) {
+			return undefined;
+		}
+
+		if (!response.ok) {
+			throw new Error(`Failed to fetch trip: ${response.status}`);
+		}
+
+		return (await response.json()) as Trip;
 	},
 );
 

@@ -2,17 +2,19 @@
 
 TripSync is a full-stack travel planning application built with Next.js, TypeScript, Fastify, and PostgreSQL.
 
-The project is developed incrementally, focusing on end-to-end functionality, maintainable architecture, and automated testing.
+The project focuses on end-to-end functionality, maintainable architecture, and automated testing.
 
 ## Tech Stack
 
 **Frontend**
+
 - Next.js 16 (App Router)
 - React and TypeScript
 - Tailwind CSS
 - Vitest and React Testing Library
 
 **Backend**
+
 - Node.js and Fastify
 - TypeScript
 - PostgreSQL
@@ -21,28 +23,46 @@ The frontend and backend are maintained in separate repositories.
 
 ## Implemented Features
 
-### Trips List
-
-- Fetch trips from PostgreSQL through the Fastify `GET /trips` endpoint.
-- Display trip titles using Next.js Server Components.
-- Show a loading state while fetching data.
-- Display an empty state when no trips exist.
-- Handle API errors with a retry option.
-- Use typed API responses.
-
-**Current limitation:** Trip-detail pages are not yet integrated with the PostgreSQL API.
+- Retrieve trips from PostgreSQL using `GET /trips`.
+- Display trip titles in Next.js Server Components.
+- Navigate to individual trips using database-generated UUIDs.
+- Fetch trip details using `GET /trips/:id`.
+- Handle loading, empty, and error states.
+- Display a not-found page for nonexistent trips.
+- Automated tests for frontend components and backend API endpoints.
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js and npm
-- PostgreSQL
-- TripSync backend repository
+- PostgreSQL installed and running
+- Both TripSync repositories
 
-### 1. Start the Backend
+### 1. Set Up PostgreSQL
 
-Configure the PostgreSQL database connection in the backend project.
+From the backend repository, create the database:
+
+```bash
+createdb tripsync
+```
+
+If the database already exists, skip this command.
+
+Initialize the schema using the provided SQL scripts:
+
+```bash
+psql -d tripsync -f sql/001_create_trips.sql
+psql -d tripsync -f sql/002_create_itinerary_items.sql
+```
+
+The first script creates the `trips` table and inserts a sample trip. The second creates the `itinerary_items` table.
+
+The scripts are intended for a fresh database and are not repeatable migrations.
+
+### 2. Start the Backend
+
+From the backend repository:
 
 ```bash
 npm install
@@ -51,37 +71,68 @@ npm run dev
 
 The Fastify API runs at `http://localhost:3001`.
 
-### 2. Start the Frontend
+The backend connects to the `tripsync` PostgreSQL database using the `pg` connection pool.
 
-Create a `.env.local` file in the frontend project root:
+It uses PostgreSQL's default connection settings and supports standard environment variables such as `PGHOST`, `PGPORT`, `PGUSER`, and `PGPASSWORD` when required by your local installation.
+
+Verify the API:
+
+```bash
+curl http://localhost:3001/trips
+```
+
+The response should contain a JSON array with the trips stored in PostgreSQL.
+
+### 3. Start the Frontend
+
+From the frontend repository, create `.env.local`:
 
 ```env
 TRIPS_API_BASE_URL=http://localhost:3001
 ```
 
-Install dependencies and start Next.js:
+Install dependencies and start the development server:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open `http://localhost:3000/trips`.
+Open:
 
-The backend and PostgreSQL must be running to retrieve trips.
+`http://localhost:3000/trips`
+
+Both PostgreSQL and Fastify must be running for the application to fetch trips.
 
 ## Testing
 
-Run frontend tests:
+### Backend
+
+Run API tests:
+
+```bash
+npm test
+```
+
+Tests use Fastify request injection and database mocks, so they don't require a running PostgreSQL instance.
+
+### Frontend
+
+Run all tests:
 
 ```bash
 npm run test -- --run
 ```
 
-Run TypeScript checks and ESLint:
+Check TypeScript:
 
 ```bash
 npx tsc --noEmit
+```
+
+Run ESLint:
+
+```bash
 npm run lint
 ```
 
@@ -91,10 +142,8 @@ Verify the production build:
 npm run build
 ```
 
-The Trips page includes an automated component test that verifies trip titles are rendered using mocked data.
-
-The loading, empty, error, retry, and database integration scenarios have also been tested manually.
-
 ## Project Status
 
-The trips list API integration is implemented and tested. Trip-detail integration and additional travel-planning functionality remain future work.
+The trip list and trip-detail pages are integrated with the Fastify API and PostgreSQL.
+
+Additional travel-planning functionality and full itinerary persistence integration remain future work.
