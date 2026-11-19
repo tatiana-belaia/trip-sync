@@ -1,36 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TripSync
+
+TripSync is a full-stack travel planning application built with Next.js, TypeScript, Fastify, and PostgreSQL.
+
+The project is developed incrementally, focusing on end-to-end functionality, maintainable architecture, and automated testing.
+
+## Tech Stack
+
+**Frontend**
+- Next.js 16 (App Router)
+- React and TypeScript
+- Tailwind CSS
+- Vitest and React Testing Library
+
+**Backend**
+- Node.js and Fastify
+- TypeScript
+- PostgreSQL
+
+The frontend and backend are maintained in separate repositories.
+
+## Implemented Features
+
+### Trips List
+
+- Fetch trips from PostgreSQL through the Fastify `GET /trips` endpoint.
+- Display trip titles using Next.js Server Components.
+- Show a loading state while fetching data.
+- Display an empty state when no trips exist.
+- Handle API errors with a retry option.
+- Use typed API responses.
+
+**Current limitation:** Trip-detail pages are not yet integrated with the PostgreSQL API.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js and npm
+- PostgreSQL
+- TripSync backend repository
+
+### 1. Start the Backend
+
+Configure the PostgreSQL database connection in the backend project.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The Fastify API runs at `http://localhost:3001`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Start the Frontend
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create a `.env.local` file in the frontend project root:
 
-## Learn More
+```env
+TRIPS_API_BASE_URL=http://localhost:3001
+```
 
-To learn more about Next.js, take a look at the following resources:
+Install dependencies and start Next.js:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open `http://localhost:3000/trips`.
 
-## Deploy on Vercel
+The backend and PostgreSQL must be running to retrieve trips.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Testing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Run frontend tests:
+
+```bash
+npm run test -- --run
+```
+
+Run TypeScript checks and ESLint:
+
+```bash
+npx tsc --noEmit
+npm run lint
+```
+
+Verify the production build:
+
+```bash
+npm run build
+```
+
+The Trips page includes an automated component test that verifies trip titles are rendered using mocked data.
+
+The loading, empty, error, retry, and database integration scenarios have also been tested manually.
+
+## Project Status
+
+The trips list API integration is implemented and tested. Trip-detail integration and additional travel-planning functionality remain future work.
