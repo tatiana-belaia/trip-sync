@@ -94,25 +94,6 @@ test("shows an empty state when itinerary has no items", async () => {
 });
 
 test("adds a new itinerary item", async () => {
-	server.use(
-		http.get(`/api/trips/italy-2026/itinerary`, () => {
-			return HttpResponse.json([]);
-		}),
-
-		http.post("/api/trips/italy-2026/itinerary", async ({ request }) => {
-			const body = await request.json();
-			const input = itineraryItemInputSchema.parse(body);
-
-			return HttpResponse.json(
-				{
-					id: 101,
-					tripId: "italy-2026",
-					...input,
-				},
-				{ status: 201 },
-			);
-		}),
-	);
 
 	renderWithProviders(<ItineraryPage />);
 
