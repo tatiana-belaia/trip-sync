@@ -1,9 +1,11 @@
 import { cache } from "react";
+import * as z from "zod";
 
-import type { Trip } from "@/types/trips";
+import type { Trip, TripDetail } from "@/contracts/trip";
+import { tripDetailSchema, tripSchema } from "@/schemas/trip";
 
 export const getTrip = cache(
-	async (tripId: string): Promise<Trip | undefined> => {
+	async (tripId: string): Promise<TripDetail | undefined> => {
 		const baseUrl = process.env.TRIPS_API_BASE_URL;
 
 		if (!baseUrl) {
@@ -25,7 +27,9 @@ export const getTrip = cache(
 			throw new Error(`Failed to fetch trip: ${response.status}`);
 		}
 
-		return (await response.json()) as Trip;
+		const data: unknown = await response.json();
+
+		return tripDetailSchema.parse(data);
 	},
 );
 
@@ -44,5 +48,7 @@ export const getTrips = async (): Promise<Trip[]> => {
 		throw new Error(`Failed to fetch trips: ${response.status}`);
 	}
 
-	return (await response.json()) as Trip[];
+	const data: unknown = await response.json();
+
+	return z.array(tripSchema).parse(data);
 };
