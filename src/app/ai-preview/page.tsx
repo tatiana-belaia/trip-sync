@@ -17,11 +17,13 @@ export default async function AiPreviewPage() {
 						<h2 className="mb-3 text-lg font-semibold">Day {day.dayNumber}</h2>
 
 						<ul className="space-y-2">
-							{day.activities.map((activity) => (
-								<li key={activity.position}>
-									{activity.position}. {activity.title}
-								</li>
-							))}
+							{[...day.activities]
+								.sort((a, b) => a.position - b.position)
+								.map((activity) => (
+									<li key={activity.position}>
+										{activity.position}. {activity.title}
+									</li>
+								))}
 						</ul>
 					</section>
 				))}

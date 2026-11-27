@@ -31,6 +31,21 @@ The frontend and backend are maintained in separate repositories.
 - Display a not-found page for nonexistent trips.
 - Automated tests for frontend components and backend API endpoints.
 
+### Itinerary Suggestions Preview
+
+TripSync includes a read-only itinerary suggestions preview backed by the Fastify API.
+
+The preview:
+
+- Fetches validated sample suggestions from `POST /ai/itinerary-suggestions`.
+- Displays activities grouped by day and ordered by position.
+- Handles API failures with an error message and retry option.
+- Includes component tests for different suggestions, activity ordering, and error handling.
+
+**Run locally:** Start the backend and frontend, then open `http://localhost:3000/ai-preview`.
+
+**Note:** Suggestions currently use predefined fixtures, not a live AI model. They are not saved to PostgreSQL.
+
 ## Getting Started
 
 ### Prerequisites
