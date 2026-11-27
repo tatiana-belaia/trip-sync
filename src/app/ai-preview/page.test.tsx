@@ -5,6 +5,10 @@ import { getItinerarySuggestions } from "@/lib/ai/itinerary-suggestions";
 
 import AiPreviewPage from "./page";
 
+vi.mock("next/server", () => ({
+	connection: vi.fn().mockResolvedValue(undefined),
+}));
+
 vi.mock("@/lib/ai/itinerary-suggestions", () => ({
 	getItinerarySuggestions: vi.fn(),
 }));
