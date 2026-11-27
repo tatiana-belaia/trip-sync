@@ -9,6 +9,10 @@ import { getTrips } from "@/lib/trips";
 
 import TripsPage from "./page";
 
+vi.mock("next/server", () => ({
+	connection: vi.fn().mockResolvedValue(undefined),
+}));
+
 vi.mock("@/lib/trips", () => ({
 	getTrips: vi.fn(),
 }));

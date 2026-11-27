@@ -1,6 +1,10 @@
+import { connection } from "next/server";
+
 import { getItinerarySuggestions } from "@/lib/ai/itinerary-suggestions";
 
 export default async function AiPreviewPage() {
+	await connection();
+
 	const { source, suggestion } = await getItinerarySuggestions("Rome");
 
 	return (
