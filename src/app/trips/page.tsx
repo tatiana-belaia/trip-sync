@@ -1,8 +1,11 @@
 import Link from "next/link";
+import { connection } from "next/server";
 
 import { getTrips } from "@/lib/trips";
 
 export default async function TripsPage() {
+	await connection();
+
 	const trips = await getTrips();
 
 	return (
